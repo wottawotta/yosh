@@ -973,6 +973,12 @@ final settingsIndex = <SettingsEntry>[
     route: '/browseS',
   ),
   SettingsEntry(
+    title: (l) => 'Source mirrors',
+    subtitle: null,
+    section: (l) => l.browse,
+    route: '/browseS',
+  ),
+  SettingsEntry(
     title: (l) => l.check_for_extension_updates,
     subtitle: null,
     section: (l) => l.browse,

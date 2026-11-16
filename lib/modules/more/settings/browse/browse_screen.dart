@@ -74,6 +74,14 @@ class BrowseSScreen extends ConsumerWidget {
                   trailing: const Icon(Symbols.chevron_forward_rounded),
                   onTap: () => context.push('/extensionServer'),
                 ),
+              ShioriSettingRow(
+                icon: Symbols.swap_horiz_rounded,
+                title: 'Source mirrors',
+                subtitle:
+                    "Point a source's dead or blocked domain at a live mirror",
+                trailing: const Icon(Symbols.chevron_forward_rounded),
+                onTap: () => context.push('/sourceMirrors'),
+              ),
               if (!animeOnly && !hideItems.contains("/MangaLibrary"))
                 repo(
                   l10n.manga_extensions_repo,

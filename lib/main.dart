@@ -21,6 +21,7 @@ import 'package:mangayomi/models/source.dart';
 import 'package:mangayomi/repositories/custom_button_repository.dart';
 import 'package:mangayomi/repositories/db.dart';
 import 'package:mangayomi/repositories/track_repository.dart';
+import 'package:mangayomi/services/http/source_mirrors.dart';
 export 'package:mangayomi/repositories/db.dart';
 export 'package:mangayomi/services/http/m_client.dart'
     show webViewEnvironment, customDns;
@@ -333,6 +334,9 @@ class _MyAppState extends ConsumerState<MyApp>
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Local mirrors apply to the app's own fetches and are pushed to the
+      // extension server once it reports for duty below.
+      unawaited(SourceMirrorStore.load());
       if (!Platform.isIOS ||
           ref.read(autoStartExtensionServerOnLaunchStateProvider)) {
         MExtensionServerPlatform(ref).startServer();

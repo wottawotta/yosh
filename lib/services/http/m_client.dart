@@ -22,6 +22,7 @@ import 'package:mangayomi/services/http/doh/doh_resolver.dart';
 import 'package:mangayomi/services/http/doh/doh_providers.dart';
 import 'package:mangayomi/services/http/doh/doh_custom_store.dart';
 import 'package:mangayomi/services/http/cf_proxy_store.dart';
+import 'package:mangayomi/services/http/source_mirrors.dart';
 import 'package:mangayomi/services/remote_webview/remote_webview_host.dart';
 import 'package:mangayomi/utils/localized_message.dart';
 import 'package:mangayomi/utils/constant.dart';
@@ -106,6 +107,7 @@ class MClient {
       client: httpClient(settings: clientSettings, reqcopyWith: reqcopyWith),
       retryPolicy: ResolveCloudFlareChallenge(showCloudFlareError),
       interceptors: [
+        MirrorInterceptor(),
         MCookieManager(reqcopyWith, useDefaultUserAgent: useDefaultUserAgent),
         LoggerInterceptor(showCloudFlareError),
       ],

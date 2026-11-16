@@ -1,8 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:m_extension_server/m_extension_server.dart';
+import 'package:mangayomi/services/http/source_mirrors.dart';
 import 'package:mangayomi/providers/browse_state_provider.dart';
 import 'package:mangayomi/repositories/settings_repository.dart';
 import 'package:mangayomi/utils/platform_utils.dart';
@@ -97,6 +100,7 @@ class MExtensionServerPlatform {
           settingsRepository.update((s) => s.androidProxyServer = localBaseUrl);
         }
       }
+      unawaited(syncSourceMirrors());
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -121,6 +125,26 @@ class MExtensionServerPlatform {
       await Future.delayed(const Duration(milliseconds: 250));
     }
     return false;
+  }
+
+  /// Sends the current mirror set to the running extension server so Mihon
+  /// APK extensions fetch from the user's mirrors too. Servers that predate
+  /// the endpoint are detected through /capabilities and skipped silently.
+  Future<void> syncSourceMirrors() async {
+    try {
+      final baseUrl = _baseUrl;
+      if (baseUrl.isEmpty || baseUrl.contains(':0')) return;
+      final caps = await http.get(Uri.parse("$baseUrl/capabilities"));
+      if (!caps.body.contains('"hostMirrors"')) return;
+      final res = await http.post(
+        Uri.parse("$baseUrl/setHostMirrors"),
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode({'mirrors': SourceMirrorStore.wireMap()}),
+      );
+      if (kDebugMode && res.statusCode != 200) {
+        print("Source mirrors not applied: HTTP ${res.statusCode}");
+      }
+    } catch (_) {}
   }
 
   Future<void> stopServer() async {

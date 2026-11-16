@@ -28,6 +28,7 @@ import 'package:mangayomi/modules/manga/detail/widgets/watch_order_screen.dart';
 import 'package:mangayomi/modules/more/data_and_storage/create_backup.dart';
 import 'package:mangayomi/modules/more/data_and_storage/data_and_storage.dart';
 import 'package:mangayomi/modules/more/settings/appearance/custom_navigation_settings.dart';
+import 'package:mangayomi/modules/more/settings/browse/source_mirrors_screen.dart';
 import 'package:mangayomi/modules/more/settings/browse/source_repositories.dart';
 import 'package:mangayomi/modules/more/settings/player/custom_button_screen.dart';
 import 'package:mangayomi/modules/more/settings/player/player_advanced_screen.dart';
@@ -300,6 +301,10 @@ class RouterNotifier extends ChangeNotifier {
     _genericRoute(
       name: "extensionServer",
       child: const ExtensionServerScreen(),
+    ),
+    _genericRoute(
+      name: "sourceMirrors",
+      child: const SourceMirrorsScreen(),
     ),
     _genericRoute<ItemType>(
       name: "SourceRepositories",
